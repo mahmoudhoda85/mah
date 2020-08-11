@@ -1,0 +1,1002 @@
+﻿/*! Map styling for US website */
+
+
+.hover-map {
+  position: relative; }
+  .hover-map .image {
+    border: 0; }
+  .hover-map .marker {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border: 0;
+    transition: all .1s ease-in-out;
+    transform: scale(0.5, 0.5) translateZ(0);
+    -webkit-filter: blur(0);
+    filter: blur(0);
+    background-size: cover;
+    background-attachment: fixed; }
+        .hover-map .marker.active, .hover-map .marker:hover {
+      transform: scale(1, 1) translateZ(0); }
+
+	.hover-map .marker:hover, .hover-map .marker:focus {
+		outline: none;
+	}
+    .hover-map .marker.road {
+      display: inline-block;
+      height: 51px;
+      width: 51px;
+      background: url(/images/hover-map/icon_road.png) no-repeat center center; }
+    .hover-map .marker.building {
+      display: inline-block;
+      height: 51px;
+      width: 51px;
+      background: url(/images/hover-map/icon_building.png) no-repeat center center; }
+    .hover-map .marker.plug {
+      display: inline-block;
+      height: 51px;
+      width: 51px;
+      background: url(/images/hover-map/icon_plug.png) no-repeat center center; }
+  .hover-map .map-item {
+    position: absolute;
+    /*
+    		.panel {
+    			z-index: 99;
+    			display: none;
+    			position: absolute;
+    			min-width: 450px;
+    			border-color: #45afc4;
+    			
+    			
+    			&.topLeft {
+    				top: 0px;
+    				left: 0px;
+    			}
+    			
+    			&.topRight {
+    				top: 0px;
+    				right: 0px;
+    				left: auto;
+    			}
+    			
+    			&.bottomLeft {
+    				bottom: 0px;
+    				left: 0px;
+    			}
+    			
+    			&.bottomRight {
+    				bottom: 0px;
+    				right: 0px;
+    			}
+    			
+    			.panel-heading {
+    				background: #45afc4;
+    			}
+    		}
+    */ }
+  .hover-map #road_1 {
+    top: 43%;
+    left: 13%; }
+  .hover-map #road_2 {
+    top: 59%;
+    left: 38%; }
+  .hover-map #road_3 {
+    top: 74%;
+    left: 49.5%; }
+  .hover-map #road_4 {
+    top: 76%;
+    left: 84%; }
+  .hover-map #building_1 {
+    top: 35%;
+    left: 24%; }
+  .hover-map #building_2 {
+    top: 66%;
+    left: 54%; }
+  .hover-map #building_3 {
+    top: 12%;
+    left: 57%; }
+  .hover-map #building_4 {
+    top: 12%;
+    left: 68%; }
+  .hover-map #building_5 {
+    top: 36%;
+    left: 73.5%; }
+  .hover-map #plug_1 {
+    top: 8%;
+    left: 63%; }
+  .hover-map #plug_2 {
+    top: 34%;
+    left: 58%; }
+  .hover-map #plug_3 {
+    top: 26%;
+    left: 89%; }
+  .hover-map #plug_4 {
+    top: 77%;
+    left: 63%; }
+
+
+
+.hover-map .panel.[data-anchor="bottomLeft"] {
+  bottom: -20px;
+  left: 40px;
+}
+    
+.hover-map .panel.[data-anchor="bottomRight"] {
+  bottom: -20px;
+  right: 0px;
+}
+    
+.hover-map .panel.[data-anchor="topLeft"] {
+  top: 45px;
+  left: 45px;
+}
+    
+.hover-map .panel.[data-anchor="topRight"] {
+  top: 40px;
+  right: 0px;
+}
+    
+.hover-map .marker.gear {
+  display: inline-block;
+  height: 51px;
+  width: 51px;
+  background: url(/images/hover-map/icon_gear.png) no-repeat center center;
+}
+
+.hover-map .marker {
+  transform: scale(0.75, 0.75) translateZ(0);
+}
+    
+.hover-map .marker.active, 
+.hover-map .marker:hover {
+  transform: scale(1, 1) translateZ(0);
+}
+
+  
+/* ============================================================================================== */
+/* !MAP #2 - Chemical Processing */
+
+  .hover-map.hover-map-2 #gear_1 {
+    top: 32%;
+    left: 22%;
+  }
+  
+  .hover-map.hover-map-2 #gear_2 {
+    top: 30%;
+    left: 26%;
+  }
+  
+  .hover-map.hover-map-2 #gear_3 {
+    top: 28%;
+    left: 30%;
+  }
+  
+  .hover-map.hover-map-2 #gear_4 {
+    top: 29%;
+    left: 17%;
+  }
+
+  .hover-map.hover-map-2 #gear_5 {
+    top: 23%;
+    left: 15%;
+  }
+
+  .hover-map.hover-map-2 #gear_6 {
+    top: 25%;
+    left: 11%;
+  }
+
+  .hover-map.hover-map-2 #gear_7 {
+    top: 22%;
+    left: 21%;
+  }
+  
+ .hover-map.hover-map-2 #gear_8 {
+    top: 14%;
+    left: 29%;
+  }
+
+ .hover-map.hover-map-2 #gear_9 {
+    top: 39%;
+    left: 41%;
+  }
+  
+  
+  
+  .hover-map.hover-map-2 #building_1 {
+    top: 16%;
+    left: 87.75%;
+  }
+  
+  
+  
+  .hover-map.hover-map-2 #road_1 {
+   top: 42%;
+    left: 77%;
+  
+  }
+  
+  .hover-map.hover-map-2 #road_2 {
+  top: 47%;
+    left: 70%;
+ 
+  }
+  
+  
+  
+  .hover-map.hover-map-2 #plug_1 {
+    top: 10%;
+    left: 48%;
+  }
+  
+  .hover-map.hover-map-2 #plug_2 {
+    top: 9%;
+    left: 56%;
+  }
+  
+  .hover-map.hover-map-2 #plug_3 {
+    top: 9%;
+    left: 68.5%;
+  }
+  
+/* ============================================================================================== */
+/* !MAP #3 - Civil Infrastructure */
+
+  .hover-map.hover-map-3 #gear_1 {
+    top: 20%;
+    left: 25%;
+  }
+  
+  .hover-map.hover-map-3 #gear_2 {
+      top: 4%;
+    left: 38%;
+  }
+  
+  .hover-map.hover-map-3 #gear_3 {
+    top: 8%;
+    left: 43%;
+  }
+
+  .hover-map.hover-map-3 #gear_4 {
+    top: 15%;
+    left: 48%;
+  }
+  
+  .hover-map.hover-map-3 #gear_5 {
+    top: 11%;
+    left: 38%;
+  }
+  
+  .hover-map.hover-map-3 #gear_6 {
+    top: 14%;
+    left: 43%;
+  }
+
+  .hover-map.hover-map-3 #gear_7 {
+    top: 7%;
+    left: 47%;
+  }
+
+
+  .hover-map.hover-map-3 #gear_8 {
+    top: 34%;
+    left: 38%;
+  }
+  
+  
+  
+  .hover-map.hover-map-3 #plug_1 {
+    top: 11%;
+    left: 55%;
+  }
+  
+  .hover-map.hover-map-3 #plug_2 {
+    top: 29%;
+    left: 52%;
+  }
+  
+  .hover-map.hover-map-3 #plug_3 {
+    top: 65%;
+    left: 30%;
+  }
+  
+  .hover-map.hover-map-3 #plug_4 {
+    top: 51%;
+    left: 14%;
+  }
+  
+  
+  
+  .hover-map.hover-map-3 #building_1 {
+    top: 41.5%;
+    left: 18.5%;
+  }
+  
+  .hover-map.hover-map-3 #building_2 {
+    top: 39%;
+    left: 25%;
+  }
+  
+  .hover-map.hover-map-3 #building_3 {
+    top: 37.5%;
+    left: 44%;
+  }
+  
+  
+  
+  .hover-map.hover-map-3 #road_1 {
+    top: 14%;
+    left: 61%;
+  }
+  
+  .hover-map.hover-map-3 #road_2 {
+    top: 33%;
+    left: 75%;
+  }
+  
+  .hover-map.hover-map-3 #road_3 {
+    top: 39%;
+    left: 84.5%;
+  }
+  
+  
+  
+/* ============================================================================================== */
+/* !MAP #4 - Commercial and Institutional - Canadian */
+
+  .hover-map.hover-map-4 #gear_1 {
+    top: 28%;
+    left: 29%;
+  }
+  
+  .hover-map.hover-map-4 #gear_2 {
+    top: 28%;
+    left: 41%;
+  }
+  
+  
+  
+  .hover-map.hover-map-4 #plug_1 {
+    top: 2%;
+    left: 54%;
+  }
+  
+  .hover-map.hover-map-4 #plug_2 {
+    top: 46%;
+    left: 18%;
+  }
+  
+  .hover-map.hover-map-4 #plug_3 {
+    top: 43%;
+    left: 27%;
+  }
+  
+  .hover-map.hover-map-4 #plug_4 {
+    top: 74%;
+    left: 32%;
+  }
+  
+  .hover-map.hover-map-4 #plug_5 {
+    top: 52%;
+    left: 41%;
+  }
+  
+  .hover-map.hover-map-4 #plug_6 {
+    top: 47.5%;
+    left: 67.5%;
+  }
+  
+  
+  
+  .hover-map.hover-map-4 #building_1 {
+    top: 42%;
+    left: 76%;
+  }
+  
+  .hover-map.hover-map-4 #building_2 {
+    top: 41.5%;
+    left: 87%;
+  }
+  
+  .hover-map.hover-map-4 #building_3 {
+    top: 64%;
+    left: 20.5%;
+  }
+
+  .hover-map.hover-map-4 #building_4 {
+    top: 12%;
+    left: 62%;
+  }
+
+  .hover-map.hover-map-4 #building_5 {
+    top: 23%;
+    left: 55.5%;
+  }
+  
+  
+  
+  .hover-map.hover-map-4 #road_1 {
+    top: 64%;
+    left: 44%;
+  }
+  
+  .hover-map.hover-map-4 #road_2 {
+    top: 64%;
+    left: 68%;
+  }
+  
+  .hover-map.hover-map-4 #road_3 {
+    top: 61%;
+    left: 77.5%;
+  }
+  
+  .hover-map.hover-map-4 #road_4 {
+    top: 55%;
+    left: 88%;
+  }
+  
+  
+  
+/* ============================================================================================== */
+/* !MAP #5 - Metals & Mining */
+
+  .hover-map.hover-map-5 #gear_1 {
+    top: 46%;
+    left: 23%;
+  }
+  
+  .hover-map.hover-map-5 #gear_2 {
+    top: 38%;
+    left: 39%;
+  }
+  
+  .hover-map.hover-map-5 #gear_3 {
+    top: 16%;
+    left: 64%;
+  }
+  
+  .hover-map.hover-map-5 #gear_4 {
+    top: 59%;
+    left: 53%;
+  }
+  
+  .hover-map.hover-map-5 #gear_5 {
+    top: 56%;
+    left: 56%;
+  }
+
+  .hover-map.hover-map-5 #gear_6 {
+    top: 65%;
+    left: 45%;
+  }
+
+  .hover-map.hover-map-5 #gear_7 {
+    top: 43%;
+    left: 45%;
+  }
+  .hover-map.hover-map-5 #gear_8 {
+    top: 48%;
+    left: 35%;
+  }
+  .hover-map.hover-map-5 #gear_9 {
+    top: 54%;
+    left: 25%;
+  }
+
+
+  .hover-map.hover-map-5 #gear_10 {
+    top: 71%;
+    left: 39%;
+  }
+  
+  
+  
+  
+  .hover-map.hover-map-5 #plug_1 {
+    top: 42%;
+    left: 73%;
+  }
+  
+  .hover-map.hover-map-5 #plug_2 {
+    top: 25%;
+    left: 87%;
+  }
+  
+  
+  
+  .hover-map.hover-map-5 #road_1 {
+    top: 28%;
+    left: 68%;
+  }
+  
+  
+  
+/* ============================================================================================== */
+/* !MAP #6 - Oil & Gas Processing */
+
+  .hover-map.hover-map-6 #plug_1 {
+    top: 27%;
+    left: 11%;
+  }
+  
+  .hover-map.hover-map-6 #plug_2 {
+    top: 17%;
+    left: 32%;
+  }
+  
+  .hover-map.hover-map-6 #plug_3 {
+    top: 18%;
+    left: 79.5%;
+  }
+  
+  
+  
+  .hover-map.hover-map-6 #gear_1 {
+    top: 42%;
+    left: 19%;
+  }
+  
+  .hover-map.hover-map-6 #gear_2 {
+    top: 14%;
+    left: 38%;
+  }
+  
+  .hover-map.hover-map-6 #gear_3 {
+    top: 29%;
+    left: 36%;
+  }
+  
+  .hover-map.hover-map-6 #gear_4 {
+    top: 15%;
+    left: 64%;
+  }
+
+  .hover-map.hover-map-6 #gear_5 {
+    top: 8%;
+    left: 67%;
+  }
+  
+
+  .hover-map.hover-map-6 #gear_6 {
+    top: 10%;
+    left: 71%;
+  }
+  
+
+  .hover-map.hover-map-6 #gear_7 {
+    top: 10%;
+    left: 62%;
+  }
+  
+
+  .hover-map.hover-map-6 #gear_8 {
+    top: 12%;
+    left: 74%;
+  }
+  
+  .hover-map.hover-map-6 #gear_9 {
+    top: 20%;
+    left: 74%;
+  }
+  
+  
+  
+  
+  .hover-map.hover-map-6 #road_1 {
+    top: 43%;
+    left: 71%;
+  }
+  
+  .hover-map.hover-map-6 #road_2 {
+    top: 49%;
+    left: 60%;
+  }
+  
+
+
+/* ============================================================================================== */
+/* !MAP #7 - Oil Extraction */
+
+  .hover-map.hover-map-7 #plug_1 {
+    top: 28%;
+    left: 15%;
+  }
+  
+  .hover-map.hover-map-7 #plug_2 {
+    top: 11%;
+    left: 48%;
+  }
+  
+  
+  
+  .hover-map.hover-map-7 #gear_1 {
+    top: 36%;
+    left: 19%;
+  }
+  
+  .hover-map.hover-map-7 #gear_2 {
+    top: 29%;
+    left: 26%;
+  }
+  
+  .hover-map.hover-map-7 #gear_3 {
+    top: 41%;
+    left: 26%;
+  }
+  
+  .hover-map.hover-map-7 #gear_4 {
+    top: 44%;
+    left: 21%;
+  }
+  
+  .hover-map.hover-map-7 #gear_5 {
+    top: 27%;
+    left: 21%;
+  }
+
+  .hover-map.hover-map-7 #gear_6 {
+    top: 19%;
+    left: 23%;
+  }
+
+  .hover-map.hover-map-7 #gear_7 {
+    top: 21%;
+    left: 16%;
+  }
+
+  .hover-map.hover-map-7 #gear_8 {
+    top: 17%;
+    left: 19%;
+  }
+
+
+  
+  .hover-map.hover-map-7 #gear_9 {
+    top: 20%;
+    left: 53%;
+  }
+
+  .hover-map.hover-map-7 #gear_10 {
+    top: 17%;
+    left: 59%;
+  }
+  
+  
+  
+  .hover-map.hover-map-7 #building_1 {
+    top: 20%;
+    left: 48%;
+  }
+  
+  .hover-map.hover-map-7 #building_2 {
+    top: 21%;
+    left: 62.5%;
+  }
+  
+  .hover-map.hover-map-7 #building_3 {
+    top: 13%;
+    left: 53%;
+  }
+  
+  
+
+/* ============================================================================================== */
+/* !MAP #8 - Shipbuilding & Marina */
+
+  .hover-map.hover-map-8 #plug_1 {
+    top: 41%;
+    left: 19%;
+  }
+  
+  .hover-map.hover-map-8 #plug_2 {
+    top: 17%;
+    left: 44%;
+  }
+  
+  
+  
+  .hover-map.hover-map-8 #gear_1 {
+    top: 32%;
+    left: 34%;
+  }
+  
+  .hover-map.hover-map-8 #gear_2 {
+    top: 43%;
+    left: 36%;
+  }
+  
+  .hover-map.hover-map-8 #gear_3 {
+    top: 47%;
+    left: 39%;
+  }
+  
+  .hover-map.hover-map-8 #gear_4 {
+    top: 27%;
+    left: 44.5%;
+  }
+
+  .hover-map.hover-map-8 #gear_5 {
+    top: 40%;
+    left: 39%;
+  }
+
+  .hover-map.hover-map-8 #gear_6 {
+    top: 37%;
+    left: 32%;
+  }
+
+  .hover-map.hover-map-8 #gear_7 {
+    top: 39%;
+    left: 55%;
+  }
+
+  .hover-map.hover-map-8 #gear_8 {
+    top: 45%;
+    left: 58%;
+  }
+
+  .hover-map.hover-map-8 #gear_9 {
+    top: 37%;
+    left: 52.5%;
+  }
+
+
+
+/* ============================================================================================== */
+/* !MAP #9 - Turf and Agricultural Irrigation */
+  
+  .hover-map.hover-map-9 #road_1 {
+    top: 33%;
+    left: 5%;
+  }
+  
+  .hover-map.hover-map-9 #road_2 {
+    top: 53%;
+    left: 21%;
+  }
+  
+  .hover-map.hover-map-9 #road_3 {
+    top: 23%;
+    left: 21%;
+  }
+  
+  .hover-map.hover-map-9 #road_4 {
+    top: 18%;
+    left: 44%;
+  }
+  
+  
+  
+  .hover-map.hover-map-9 #plug_1 {
+    top: 10.5%;
+    left: 32.5%;
+  }
+  
+  .hover-map.hover-map-9 #plug_2 {
+    top: 19%;
+    left: 63.5%;
+  }
+  
+  
+  
+  .hover-map.hover-map-9 #gear_1 {
+    top: 19%;
+    left: 58%;
+  }
+  
+  .hover-map.hover-map-9 #gear_2 {
+    top: 16%;
+    left: 61%;
+  }
+
+  .hover-map.hover-map-9 #gear_3 {
+    top: 21%;
+    left: 61%;
+  }
+  
+  .hover-map.hover-map-9 #gear_4 {
+    top: 36%;
+    left: 46%;
+  }
+  
+  .hover-map.hover-map-9 #gear_5 {
+    top: 36%;
+    left: 49%;
+  }
+  
+  .hover-map.hover-map-9 #gear_6 {
+    top: 5%;
+    left: 41%;
+  }
+  
+  .hover-map.hover-map-9 #gear_7 {
+    top: 12%;
+    left: 41%;
+  }
+  
+  
+  
+  
+/* ============================================================================================== */
+/* !MAP #10 - Wastewater Treatment */ 
+  
+  .hover-map.hover-map-10 #building_1 {
+    top: 17%;
+    left: 18.5%;
+  }
+  
+  
+  
+  .hover-map.hover-map-10 #plug_1 {
+    top: 16%;
+    left: 28.5%;
+  }
+  
+  .hover-map.hover-map-10 #plug_2 {
+    top: 29%;
+    left: 21%;
+  }
+  
+  
+  
+  .hover-map.hover-map-10 #road_1 {
+    top: 41.5%;
+    left: 13%;
+  }
+  
+  
+  
+  .hover-map.hover-map-10 #gear_1 {
+    top: 40%;
+    left: 22.5%;
+  }
+  
+  .hover-map.hover-map-10 #gear_2 {
+    top: 21%;
+    left: 34.75%;
+  }
+  
+  .hover-map.hover-map-10 #gear_3 {
+    top: 16%;
+    left: 57%;
+  }
+  
+  .hover-map.hover-map-10 #gear_4 {
+    top: 37%;
+    left: 54%;
+  }
+  
+  .hover-map.hover-map-10 #gear_5 {
+    top: 26%;
+    left: 66.5%;
+  }
+  .hover-map.hover-map-10 #gear_6 {
+    top: 36%;
+    left: 66.5%;
+  }
+  .hover-map.hover-map-10 #gear_7 {
+    top: 32%;
+    left: 46.5%;
+  }
+  .hover-map.hover-map-10 #gear_8 {
+    top: 34%;
+    left: 36.5%;
+  }
+  .hover-map.hover-map-10 #gear_9 {
+    top: 26%;
+    left: 74.5%;
+  }
+  .hover-map.hover-map-10 #gear_10 {
+    top: 32%;
+    left: 76.5%;
+  }
+  
+  
+
+/*
+.popover {
+	border-radius: 0;
+	padding: 0;
+	border: 0;
+
+	max-width: 100%;
+	width: 420px;
+
+	
+	.arrow {
+		display: none !important;
+	}
+	
+	.panel {
+		margin-bottom: 0;
+	}
+	
+	.panel {
+		.panel-heading {
+			background: $teal;
+		}
+		
+		.panel-body {
+			UL {
+				LI {
+					&:before {
+						color: $teal;
+					}
+				}
+			}
+			
+			A {
+				color: $default;
+			}
+		}
+		
+		&.green {
+			border-color: $green;
+			
+			.panel-heading {
+				background: $green;
+			}
+			
+			.panel-body {
+				UL {
+					LI {
+						&:before {
+							color: $green;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	.panel-body {
+		UL {
+			@extend .bullet-arrow;
+		}
+	}
+}
+
+
+
+.popover-content {
+	padding: 0;
+}
+*/
+.hover-map .panel {
+  z-index: 99;
+  display: none;
+  position: absolute;
+  min-width: 450px;
+  border-color: #46afc3; }
+  .hover-map .panel.hover {
+    display: block; }
+  .hover-map .panel.clicked {
+    display: block; }
+  .hover-map .panel[data-anchor="bottomLeft"] {
+    bottom: -20px;
+    left: 40px; }
+  .hover-map .panel[data-anchor="bottomRight"] {
+    bottom: -20px;
+    right: 0px; }
+  .hover-map .panel[data-anchor="topLeft"] {
+    top: 40px;
+    left: 50px; }
+  .hover-map .panel[data-anchor="topRight"] {
+    top: 40px;
+    right: 0px; }
+  .hover-map .panel .panel-heading {
+    background: #46afc3; }
+  .hover-map .panel.green {
+    border-color: #70ae52; }
+    .hover-map .panel.green .panel-heading {
+      background: #70ae52; }
+    .hover-map .panel.green .panel-body UL LI:before {
+      color: #70ae52; }
+
+.hover-map-contact {
+  min-height: 263px; }
+  .hover-map-contact.loaded {
+    display: flex;
+    align-items: center; }
+
+.hover-map .panel.green .panel-title { color: #fff !important;}
