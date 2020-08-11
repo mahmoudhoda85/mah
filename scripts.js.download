@@ -1,0 +1,1027 @@
+var MarketSectorID              = -1;
+var ProductLineID               = -1;
+var ContentTypeID               = -1;
+var LocationID                  = -1;
+var SearchResultPageUrl         = "";
+var SubscribeErrorEmailEmpty    = "";
+var SubscribeErrorServerError   = "";
+var CultureLCID                 = 0;
+var CurrentPageID               = 0;
+var CheckedDocs                 = "";
+var ContactRepresentativeUrl    = "";
+var ContentTypePresaved         = false;
+var SearchResultsPageSize       = 10;
+var SearchResultsKeyword        = "";
+var NoResulrsMessage            = "";
+var ShowOfficesWithProducts     = true;
+
+
+$(function () {
+
+    if (document.location.pathname == '/fr/fr-contact-a-representative/' || document.location.pathname == '/fr/fr-contact-a-representative') {
+        $('#select_marketSegment_sr option').eq(1).attr('value', 350);
+    }
+
+
+
+
+	equalheight = function(container) {
+
+		var currentTallest = 0,
+		currentRowStart = 0,
+		rowDivs = new Array(),
+		
+		rowDivs = [];
+		var $el,
+		topPosition = 0;
+		
+		$(container).each(function() {
+		
+			$el = $(this);
+			$($el).height('auto');
+			topPostion = $el.position().top;
+			
+			if (currentRowStart !== topPostion) {
+				for (currentDiv = 0; currentDiv < rowDivs.length; currentDiv++) {
+					rowDivs[currentDiv].height(currentTallest);
+				}
+				rowDivs.length = 0; // empty the array
+				currentRowStart = topPostion;
+				currentTallest = $el.height();
+				rowDivs.push($el);
+			} else {
+				rowDivs.push($el);
+				currentTallest = (currentTallest < $el.height()) ? ($el.height()) : (currentTallest);
+			}
+			for (currentDiv = 0; currentDiv < rowDivs.length; currentDiv++) {
+				rowDivs[currentDiv].height(currentTallest);
+			}
+		});
+	};
+	
+	//Hide the Applications menu on Mobile Device
+	if ($( "#mobile_company-brand" ).is(':visible')) { 
+		$('ul.nav li.dropdown a.dropdown-toggle').filter(function() { return $.text([this]) === 'Applications '; }).remove();
+	}
+	  
+	$(".carousel").swiperight(function() {
+		$(this).carousel('prev');
+	});
+	$(".carousel").swipeleft(function() {
+		$(this).carousel('next');
+	});
+	
+	$(window).on('load', function() {
+		equalheight('.equal-height-container .equal-height-column');
+	});
+	
+	
+	$(window).on('resize', function(){
+		equalheight('.equal-height-container .equal-height-column');
+	});
+	
+	
+	$('.download-selector .btn').on('click', function(e) {
+		e.preventDefault();
+		
+		$(this).closest('.btn-group-vertical').find('.btn').removeClass('active');
+		$(this).addClass('active');
+	});
+	
+	$('.btn-select-all').on('click', function() {
+		$('#checkbox_all').trigger('click');
+	});
+	
+	$('#checkbox_all').on('click', function() {
+		$('input.with-fa').not(this).prop('checked', this.checked);
+	});
+	
+	$('.selectpicker').selectpicker();
+
+	
+	$(".fancybox").fancybox({
+		maxWidth	: 800,
+		maxHeight	: 600,
+		fitToView	: false,
+		width		: '70%',
+		height		: '70%',
+		autoSize	: false,
+		closeClick	: false,
+		openEffect	: 'none',
+		closeEffect	: 'none'
+	});
+	
+	$('#workbench_toggle').on('click', function() {
+		$(this).closest('.workbench').find('.panel-body').slideToggle('fast');
+		
+		$('#workbench_toggle_up').toggle();
+		$('#workbench_toggle_down').toggle();
+	});
+	
+	
+	
+	$('.hover-map .marker').on('click', function(e) {
+		e.preventDefault();
+		
+		$('.hover-map .marker').not(this).removeClass('active').closest('.map-item').find('.panel').removeClass('clicked');
+		
+		//$('.hover-map').find('.panel').removeClass('clicked');
+		//$(this).toggleClass('active');
+		$(this).toggleClass('active').next().toggleClass('clicked');
+		
+	});
+	
+	var toutHeight = $('.hover-map-touts .item').height();
+	$('.hover-map-contact').height(toutHeight-2).addClass('loaded');
+	
+/*
+	$('.hover-map .map-item').on('mouseenter', function() {
+		$('.marker').removeClass('active');
+		$('.panel').removeClass('clicked hover');
+		
+		$(this).find('.marker').addClass('active');
+		$(this).find('.panel').addClass('hover');	
+	});
+	
+	$('.hover-map .map-item').on('mouseleave', function() {
+	
+		$(this).find('.panel:not(.clicked)').removeClass('hover');
+		$(this).find('.marker').removeClass('active');
+	});
+	*/
+
+
+    // keyword-search #desktop_searchContainer .form-control
+	$(".keyword-search input[type='text'][name='keyword']").on("keypress", function (event) {
+	    if (event.which == 13) {
+	        var $this = $(this);
+	        KeywordSearch($this.val(), $this);
+	    }
+	});
+	$(".keyword-search .search-glass").on("click", function () {
+	    var $this = $(this);
+	    var input = $this.parent().find("input[type='text'][name='keyword']");
+	    KeywordSearch(input.val(), input);
+	});
+
+	$("#emailDocuments [type='submit']").on("click", function () {
+	    var emails = $("#emailDocuments .emails").val();
+
+	    var $errorMessageBox = $("#emailDocuments .message-panel");
+	    var $errorMessage = $errorMessageBox.find(".message");
+
+	    $errorMessage.html("");
+	    $errorMessageBox.fadeOut();
+
+	    $.post("/resources/emailselected", { checkedDocs: CheckedDocs, emails: emails, currentPageID: CurrentPageID, cultureLCID: CultureLCID })
+              .done(function (data) {
+                  if (data.success) {
+                      $("#emailDocuments").modal("hide");
+                  }
+                  else {
+                      $errorMessage.html(data.message);
+                      $errorMessageBox.fadeIn();
+                  }
+              });
+	});
+
+	$(".customer-services-filter .search-custom-services").on("click", function (e) {
+	    e.preventDefault();
+	    var $container = $("#offices");
+	    ShowLoader($container);
+
+	    var marketID = $("#select_marketSegment_cs option:selected").val();
+	    var locationID = $("#select_province_cs option:selected").val();
+	    $.post("/contacts/customer-services", { marketSectorID: marketID, locationID: locationID, currentPageID: CurrentPageID, cultureLCID: CultureLCID })
+              .done(function (data) {
+                  $("#offices").html(data);
+              })
+              .always(function () {
+                  HideLoader($container);
+              });
+	})
+	$(".sales-representatives-filter .search-custom-services").on("click", function (e) {
+	    e.preventDefault();
+	    var marketID = $("#select_marketSegment_sr option:selected").val();
+	    var locationID = $("#select_province_sr option:selected").val();
+	    SearchSalesRepresentatives(marketID, locationID, ShowOfficesWithProducts);
+	})
+	$(".sales-representatives-filter .search-custom-services-short").on("click", function (e) {
+	    e.preventDefault();
+	    var marketID = $("#select_marketSegment_sr option:selected").val();
+	    var locationID = $("#select_province_sr option:selected").val();
+	    var url = ContactRepresentativeUrl + "?market=" + marketID + "&location=" + locationID;
+	    location.href = url;
+	})
+
+	$("li .bullet-default").parent().parent().addClass("bullet-default");
+	$("li .bullet-arrow").parent().parent().addClass("bullet-arrow");
+	$("li .bullet-check").parent().parent().addClass("bullet-check");
+});
+
+function SearchSalesRepresentatives(marketID, locationID, withProductsRepresented)
+{
+    ShowOfficesWithProducts = withProductsRepresented;
+    var $container = $("#offices");
+    ShowLoader($container);
+
+    $.post("/contacts/sales-representatives", { marketSectorID: marketID, locationID: locationID, withProductsRepresented: withProductsRepresented, currentPageID: CurrentPageID, cultureLCID: CultureLCID })
+          .done(function (data) {
+              $("#offices").html(data);
+          })
+          .always(function () {
+              HideLoader($container);
+          });
+}
+
+function htmlEscape(str) {
+    return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+}
+
+function KeywordSearch(keyword, input) {
+    if (SearchResultPageUrl.length == 0)
+    {
+        console.log("The Search-Result page doesn't configured. Please add a link to root site node through Umbraco Admin panel, Property 'Search Result Page on Settings tab'");
+        return;
+    }
+    if (keyword.length >= 3) {
+        var url = SearchResultPageUrl +  "?search=" + htmlEscape(keyword);
+        window.location.href = url;
+    }
+}
+
+function ShowHideDownloadButton() {
+    var checked = $('.download-results .item input.with-fa:checked').length;
+    var all = $('.download-results .item input.with-fa').length;
+
+    console.log("checked: " + checked);
+    if (checked > 0) {
+        $('.desktop-files .btn-download').removeClass('disabled')
+        $('.desktop-files .btn-share').removeClass('disabled')
+    }
+    else {
+        $('.desktop-files .btn-download').addClass('disabled')
+        $('.desktop-files .btn-share').addClass('disabled')
+    }
+    if (all != checked) {
+        $('#checkbox_all').prop('checked', false);
+    }
+}
+
+function InitMatchingDocumentsEvents() {
+
+    $('.btn-select-all').on('click', function () {
+        $('#checkbox_all').trigger('click');
+    });
+
+
+    $('input.with-fa').change(function () {
+        ShowHideDownloadButton();
+    });
+
+    $('#checkbox_all').on('click', function () {
+        $('input.with-fa').not(this).prop('checked', this.checked);
+        ShowHideDownloadButton();
+    });
+
+    $('.download-results .item .title A').on('click', function (e) {
+        e.preventDefault();
+        var element = $(this).attr('href');
+        $(element).trigger('click');
+    });
+    $("#submitSearchMatchingDocuments").on('click', function () {
+        SearchMatchingDocuments();
+    });
+
+    $("#searchMatchingDocuments")
+/*
+        .keyup(function () {
+
+        // Retrieve the input field text and reset the count to zero
+        var filter = $(this).val(), count = 0;
+
+        // Loop through the comment list
+        $(".download-results .item .title").each(function () {
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).parent().parent().fadeOut();
+
+                // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).parent().parent().show();
+                count++;
+            }
+        });
+
+        $(".download-results ul.selectpicker li").each(function () {
+
+            // If the list item does not contain the text phrase fade it out
+            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+                $(this).fadeOut();
+
+                // Show the list item if the phrase matches and increase the count by 1
+            } else {
+                $(this).show();
+            }
+        });
+    })
+*/
+    .keydown(function( event ) {
+        if (event.which == 13) {
+            event.preventDefault();
+            SearchMatchingDocuments();
+        }
+    });
+
+    $('.desktop-files .download-selected').on("click", function (e) {
+        var checked = $('.download-results .desktop-files .item input.with-fa:checked');
+        CheckedDocs = '';
+        $.each(checked, function () {
+            CheckedDocs = CheckedDocs + $(this).val() + '-';
+        });
+        if (CheckedDocs != '') {
+            location.href = "/resources/download/" + CheckedDocs;
+        }
+    });
+    $('.desktop-files .email-selected').on("click", function (e) {
+        CheckedDocs = "";
+        var checked = $('.download-results .desktop-files .item input.with-fa:checked');
+        $.each(checked, function () {
+            CheckedDocs = CheckedDocs + $(this).val() + '-';
+        });
+    });
+    $('.mobile-files .email-selected').on("click", function (e) {
+        CheckedDocs = "";
+        $('#select_documents :selected').each(function (i, selected) {
+            CheckedDocs = CheckedDocs + $(selected).val() + "-";
+        });
+    });
+
+    $('.mobile-files .btn-download').on('click', function (e) {
+
+        if ($('#select_documents').val().length == 1)
+            document.location = $('a[data-docid=' + $('#select_documents').val()[0] + ']').attr('href');
+        else
+            document.location = '/resources/download/' + $('#select_documents').val().join('-') + '-';
+
+    });
+
+}
+
+function PopulateDocumentsTable(id, cultureLCID) {
+    console.log("marketSectorID: " + MarketSectorID + ", productLineID: " + ProductLineID + ", contentTypeID: " + ContentTypeID);
+    if (MarketSectorID < 0 || ProductLineID < 0 || ContentTypeID < 0) {
+        return false;
+    }
+    if (MarketSectorID == undefined || MarketSectorID == "")
+        return true;
+    if (ProductLineID == undefined || ProductLineID == "")
+        return true;
+    if (ContentTypeID == undefined || ContentTypeID == "")
+        return true;
+
+    $(".download-results").children().fadeOut("slow");
+    $(".download-results").find(".search-container").fadeIn("slow");
+    var $container = $(".download-results");
+    var $loader = $container.find(".search-container");
+    ShowLoader($loader);
+
+    var url = "/resources/getresourcefiles";
+    $.ajax({
+        url: url,
+        data: {
+            marketSectorID: MarketSectorID,
+            productLineID: ProductLineID,
+            contentTypeID: ContentTypeID,
+            currentPage: id,
+            cultureLCID: cultureLCID
+        },
+        cache: false,
+        type: "POST",
+        dataType: "html",
+        success: function (data) {
+            $container.html(data);
+            $('#select_documents').selectpicker('refresh');
+
+            InitMatchingDocumentsEvents();
+        }
+    }).always(function () {
+        HideLoader($loader);
+    });
+}
+
+function SearchMatchingDocuments() {
+    var keyword = $("#searchMatchingDocuments").val();
+    console.log("marketSectorID: " + MarketSectorID + ", productLineID: " + ProductLineID + ", contentTypeID: " + ContentTypeID + ", keyword: " + keyword);
+    if (MarketSectorID < 0 || ProductLineID < 0 || ContentTypeID < 0) 
+        return true;
+    if (MarketSectorID == undefined || MarketSectorID == "")
+        return true;
+    if (ProductLineID == undefined || ProductLineID == "")
+        return true;
+    if (ContentTypeID == undefined || ContentTypeID == "")
+        return true;
+
+    $(".download-results").children().fadeOut("slow");
+    $(".download-results").find(".search-container").fadeIn("slow");
+    var $container = $(".download-results");
+    var $loader = $container.find(".search-container");
+    ShowLoader($loader);
+
+    var url = "/resources/searchresultsmatchingdocuments";
+    $.ajax({
+        url: url,
+        data: {
+            keyword:        keyword,
+            marketSectorID: MarketSectorID,
+            productLineID:  ProductLineID,
+            contentTypeID:  ContentTypeID,
+            currentPageID:  CurrentPageID,
+            cultureLCID:    CultureLCID
+        },
+        cache: false,
+        type: "POST",
+        dataType: "html",
+        success: function (data) {
+            $container.html(data);
+            $('#select_documents').selectpicker('refresh');
+
+            InitMatchingDocumentsEvents();
+        }
+    }).always(function () {
+        HideLoader($loader);
+    });
+}
+
+function InitProductFilters(currentPage,  listAlias, cultureLCID) {
+    $(".marker-sectors button").on('click', function () {
+            MarketSectorID = $(this).val();
+            ProductLineID = -1;
+            if (!ContentTypePresaved) {
+                ContentTypeID = -1;
+            }
+            PopulateProductLines(currentPage, listAlias, cultureLCID);
+            PopulateDocumentsTable(currentPage, cultureLCID);
+    });
+
+    $(".marker-sectors #select_market").on('change', function () {
+            MarketSectorID = $(this).find("option:selected").val();
+            ProductLineID = -1;
+            if (!ContentTypePresaved) {
+                ContentTypeID = -1;
+            }
+            PopulateProductLines(currentPage, listAlias, cultureLCID);
+            PopulateDocumentsTable(currentPage, cultureLCID);
+    });
+/*
+    $(".content-types button").on('click', function () {
+            ContentTypeID = $(this).val();
+            PopulateDocumentsTable(currentPage, cultureLCID);
+    });
+
+    $(".content-types #select_content").on('change', function () {
+            ContentTypeID = $(this).find("option:selected").val();
+            PopulateDocumentsTable(currentPage, cultureLCID);
+    });
+
+*/
+	if (getParameterByName('aquarise') && (location.pathname == '/resources/technical-library/' || location.pathname == '/usa/resources/technical-library/'))
+	{
+	    MarketSectorID = 4035;
+	    $('button[value=4035]').addClass('active');
+		PopulateProductLines(4512, 'showOnTechnicalLibraryPage', 4105, function() { 
+
+			$('button[value=12633]').trigger('click');
+
+		});
+	}
+	else if (getParameterByName('aquarise') && location.pathname == '/fr/ressources/biblioth%C3%A8que-technique/')
+	{
+		MarketSectorID = 8232;
+	    $('button[value=4035]').addClass('active');
+		PopulateProductLines(7828, 'showOnTechnicalLibraryPage', 3084, function() { 
+
+			$('button[value=8394]').trigger('click');
+
+		});
+	}
+}
+
+function PopulateContentTypes(currentPageID, cultureLCID) {
+    if (MarketSectorID == undefined || MarketSectorID == "")
+        return true;
+    if (ProductLineID == undefined || ProductLineID == "")
+        return true;
+    var url = "/resources/contenttypes";
+    var $container = $(".content-types");
+    ShowLoader($container);
+    $.ajax({
+        url: url,
+        data: {
+            marketSectorID: MarketSectorID,
+            productLineID: ProductLineID,
+            currentPage: currentPageID,
+            cultureLCID: cultureLCID,
+        },
+        cache: false,
+        type: "POST",
+        dataType: "html",
+        success: function (data) {
+            $container.html(data);
+            $('#select_content').selectpicker('refresh');
+
+            $container.find("button").on('click', function (e) {
+                e.preventDefault();
+                $(this).siblings().removeClass("active");
+                $(this).toggleClass("active");
+                ContentTypeID = $(this).val();
+                PopulateDocumentsTable(currentPageID, cultureLCID);
+
+            });
+            $container.find("#select_content").on('change', function () {
+                ContentTypeID = $(this).find("option:selected").val();
+                PopulateDocumentsTable(currentPageID, cultureLCID);
+            });
+
+        }
+    }).always(function () {
+        HideLoader($container);
+    });
+
+}
+function PopulateProductLines(currentPageID, listAlias, cultureLCID, callback) {
+    if (MarketSectorID == undefined || MarketSectorID == "")
+        return true;
+    var url = "/resources/productlines";
+    var $container = $(".product-lines");
+    ShowLoader($container);
+    $.ajax({
+        url: url,
+        data: {
+            marketSectorID: MarketSectorID,
+            contentTypeID: ContentTypeID,
+            currentPage: currentPageID,
+            cultureLCID: cultureLCID,
+            listAlias: listAlias
+        },
+        cache: false,
+        type: "POST",
+        dataType: "html",
+        success: function (data) {
+            $container.html(data);
+            
+            $('#select_product').selectpicker('refresh');
+
+            $(".product-lines button").on('click', function (e) {
+                e.preventDefault();
+                $(this).siblings().removeClass("active");
+                $(this).toggleClass("active");
+                ProductLineID = $(this).val();
+                if (!ContentTypePresaved) {
+                    ContentTypeID = -1;
+                    PopulateContentTypes(currentPageID, cultureLCID);
+                }
+                PopulateDocumentsTable(currentPageID, cultureLCID);
+
+            });
+            $(".product-lines #select_product").on('change', function () {
+                ProductLineID = $(this).find("option:selected").val();
+                if (!ContentTypePresaved) {
+                    ContentTypeID = -1;
+                    PopulateContentTypes(currentPageID, cultureLCID);
+                } PopulateDocumentsTable(currentPageID, cultureLCID);
+            });
+
+            if (callback)
+            	callback();
+
+        }
+    }).always(function () {
+        HideLoader($container);
+    });
+}
+
+function SearchResults() {
+    var $loader = $(".loader-container");
+    var pageNumElem = "#currentPageNum";
+    ShowLoader($loader);
+    var $pageNum = $(pageNumElem);
+
+    $.post("/resources/searchresults", { keyword: SearchResultsKeyword, pageNum: $pageNum.val(), pageSize: SearchResultsPageSize, currentPageID: CurrentPageID, cultureLCID: CultureLCID })
+      .done(function (data) {
+          $(pageNumElem).remove();
+          $(".read-more-btn").remove();
+          $(".search-results-container").append(data);
+          $(".read-more-btn").on("click", function () {
+              SearchResults();
+          });
+          HideLoader($loader);
+          $loader.remove();
+      }).fail(function () {
+          HideLoader($loader);
+      })
+}
+function ShowLoader($container) {
+    $container.LoadingOverlay("show", {
+        color:          "#F9F9F9",
+        image:          "/scripts/loading.gif",
+        maxSize:        "60px",
+        minSize:        "20px",
+        resizeInterval: 0,
+        size:           "50%"
+    });
+}
+function HideLoader($container) {
+    $container.LoadingOverlay("hide");
+}
+
+function emailSelected() {
+
+    var selectedItem = '';
+    var firsRun = true;
+    var checked = $('.download-results .desktop-files .item input.with-fa:checked');
+    $.each(checked, function () {
+        if (firsRun) {
+            firsRun = false;
+            selectedItem = $(this).val();
+        }
+        else {
+            selectedItem += '-' + $(this).val();
+        }
+
+    });
+
+    var email = '';
+    var subject = 'IPEX technical Library';
+    var emailBody = '';
+
+
+    $.post("/resources/geturlselected", { checkedDocs: selectedItem, currentPageID: CurrentPageID, cultureLCID: CultureLCID })
+          .done(function (data) {
+
+              emailBody = data;
+              var temp = 'mailto:' + email + '?subject=' + subject + '&body=' + emailBody;
+              window.location = temp;
+          }
+          );
+}
+function emailDropDownSelected() {
+    var selectedItem = '';
+    var firsRun = true;
+    var checked = $('#select_documents :selected');
+    $.each(checked, function () {
+        if (firsRun) {
+            firsRun = false;
+            selectedItem = $(this).val();
+        }
+        else {
+            selectedItem += '-' + $(this).val();
+        }
+
+    });
+
+    var email = '';
+    var subject = 'IPEX technical Library';
+    var emailBody = '';
+
+
+    $.post("/resources/geturlselected", { checkedDocs: selectedItem, currentPageID: CurrentPageID, cultureLCID: CultureLCID })
+          .done(function (data) {
+
+              emailBody = data;
+              var temp = 'mailto:' + email + '?subject=' + subject + '&body=' + emailBody;
+              window.location = temp;
+          }
+          );
+}
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
+if (!getCookie('geo') && document.location.pathname == '/')
+{
+    $.get("http://ipinfo.io", function(response) {
+      
+        if (response.country == 'US')
+        {
+            setCookie('geo', response.country);
+            document.location = '/usa';
+        }
+
+    }, "jsonp");
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+
+/*
+* $ lightbox_me
+* By: Buck Wilson
+* Version : 2.4
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+
+(function ($) {
+
+    $.fn.lightbox_me = function (options) {
+
+        return this.each(function () {
+
+            var
+                opts = $.extend({}, $.fn.lightbox_me.defaults, options),
+                $overlay = $(),
+                $self = $(this),
+                $iframe = $('<iframe id="foo" style="z-index: ' + (opts.zIndex + 1) + ';border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; filter: mask();"/>');
+
+            if (opts.showOverlay) {
+                //check if there's an existing overlay, if so, make subequent ones clear
+                var $currentOverlays = $(".js_lb_overlay:visible");
+                if ($currentOverlays.length > 0) {
+                    $overlay = $('<div class="lb_overlay_clear js_lb_overlay"/>');
+                } else {
+                    $overlay = $('<div class="' + opts.classPrefix + '_overlay js_lb_overlay"/>');
+                }
+            }
+
+            /*----------------------------------------------------
+               DOM Building
+            ---------------------------------------------------- */
+            $('body').append($self.hide()).append($overlay);
+
+
+            /*----------------------------------------------------
+               Overlay CSS stuffs
+            ---------------------------------------------------- */
+
+            // set css of the overlay
+            if (opts.showOverlay) {
+                setOverlayHeight(); // pulled this into a function because it is called on window resize.
+                $overlay.css({ position: 'absolute', width: '100%', top: 0, left: 0, right: 0, bottom: 0, zIndex: (opts.zIndex + 2), display: 'none' });
+                if (!$overlay.hasClass('lb_overlay_clear')) {
+                    $overlay.css(opts.overlayCSS);
+                }
+            }
+
+            /*----------------------------------------------------
+               Animate it in.
+            ---------------------------------------------------- */
+            //
+            if (opts.showOverlay) {
+                $overlay.fadeIn(opts.overlaySpeed, function () {
+                    setSelfPosition();
+                    $self[opts.appearEffect](opts.lightboxSpeed, function () { setOverlayHeight(); setSelfPosition(); opts.onLoad() });
+                });
+            } else {
+                setSelfPosition();
+                $self[opts.appearEffect](opts.lightboxSpeed, function () { opts.onLoad() });
+            }
+
+            /*----------------------------------------------------
+               Hide parent if parent specified (parentLightbox should be jquery reference to any parent lightbox)
+            ---------------------------------------------------- */
+            if (opts.parentLightbox) {
+                opts.parentLightbox.fadeOut(200);
+            }
+
+
+            /*----------------------------------------------------
+               Bind Events
+            ---------------------------------------------------- */
+
+            $(window).resize(setOverlayHeight)
+                     .resize(setSelfPosition)
+                     .scroll(setSelfPosition);
+
+            $(window).bind('keyup.lightbox_me', observeKeyPress);
+
+            if (opts.closeClick) {
+                $overlay.click(function (e) { closeLightbox(); e.preventDefault; });
+            }
+            $self.delegate(opts.closeSelector, "click", function (e) {
+                closeLightbox(); e.preventDefault();
+            });
+            $self.bind('close', closeLightbox);
+            $self.bind('reposition', setSelfPosition);
+
+
+
+            /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+
+            /*----------------------------------------------------
+               Private Functions
+            ---------------------------------------------------- */
+
+            /* Remove or hide all elements */
+            function closeLightbox() {
+                var s = $self[0].style;
+                if (opts.destroyOnClose) {
+                    $self.add($overlay).remove();
+                } else {
+                    $self.add($overlay).hide();
+                }
+
+                //show the hidden parent lightbox
+                if (opts.parentLightbox) {
+                    opts.parentLightbox.fadeIn(200);
+                }
+                if (opts.preventScroll) {
+                    $('body').css('overflow', '');
+                }
+                $iframe.remove();
+
+                // clean up events.
+                $self.undelegate(opts.closeSelector, "click");
+                $self.unbind('close', closeLightbox);
+                $self.unbind('repositon', setSelfPosition);
+
+                $(window).unbind('resize', setOverlayHeight);
+                $(window).unbind('resize', setSelfPosition);
+                $(window).unbind('scroll', setSelfPosition);
+                $(window).unbind('keyup.lightbox_me');
+                opts.onClose();
+            }
+
+
+            /* Function to bind to the window to observe the escape/enter key press */
+            function observeKeyPress(e) {
+                if ((e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which == 0)) && opts.closeEsc) closeLightbox();
+            }
+
+
+            /* Set the height of the overlay
+                    : if the document height is taller than the window, then set the overlay height to the document height.
+                    : otherwise, just set overlay height: 100%
+            */
+            function setOverlayHeight() {
+                if ($(window).height() < $(document).height()) {
+                    $overlay.css({ height: $(document).height() + 'px' });
+                    $iframe.css({ height: $(document).height() + 'px' });
+                } else {
+                    $overlay.css({ height: '100%' });
+                }
+            }
+
+
+            /* Set the position of the modal'd window ($self)
+                    : if $self is taller than the window, then make it absolutely positioned
+                    : otherwise fixed
+            */
+            function setSelfPosition() {
+                var s = $self[0].style;
+
+                // reset CSS so width is re-calculated for margin-left CSS
+                $self.css({ left: '50%', marginLeft: ($self.outerWidth() / 2) * -1, zIndex: (opts.zIndex + 3) });
+
+
+                /* we have to get a little fancy when dealing with height, because lightbox_me
+                    is just so fancy.
+                 */
+
+                // if the height of $self is bigger than the window and self isn't already position absolute
+                if (($self.height() + 80 >= $(window).height()) && ($self.css('position') != 'absolute')) {
+
+                    // we are going to make it positioned where the user can see it, but they can still scroll
+                    // so the top offset is based on the user's scroll position.
+                    var topOffset = $(document).scrollTop() + 40;
+                    $self.css({ position: 'absolute', top: topOffset + 'px', marginTop: 0 })
+                } else if ($self.height() + 80 < $(window).height()) {
+                    //if the height is less than the window height, then we're gonna make this thing position: fixed.
+                    if (opts.centered) {
+                        $self.css({ position: 'fixed', top: '50%', marginTop: ($self.outerHeight() / 2) * -1 })
+                    } else {
+                        $self.css({ position: 'fixed' }).css(opts.modalCSS);
+                    }
+                    if (opts.preventScroll) {
+                        $('body').css('overflow', 'hidden');
+                    }
+                }
+            }
+
+        });
+
+
+
+    };
+
+    $.fn.lightbox_me.defaults = {
+
+        // animation
+        appearEffect: "fadeIn",
+        appearEase: "",
+        overlaySpeed: 250,
+        lightboxSpeed: 300,
+
+        // close
+        closeSelector: ".close",
+        closeClick: true,
+        closeEsc: true,
+
+        // behavior
+        destroyOnClose: false,
+        showOverlay: true,
+        parentLightbox: false,
+        preventScroll: false,
+
+        // callbacks
+        onLoad: function () { },
+        onClose: function () { },
+
+        // style
+        classPrefix: 'lb',
+        zIndex: 999,
+        centered: false,
+        modalCSS: { top: '40px' },
+        overlayCSS: { background: 'black', opacity: .3 }
+    }
+})(jQuery);
+
+
+function playYouTubeVideo(videoId) {
+
+    //Add the video to the container 
+    $('#modelvideo').html('<iframe width="531" height="300" src="https://www.youtube.com/embed/' + videoId + '?rel=0&amp;showinfo=0&autoplay=1&controls=1" frameborder="0" allowfullscreen></iframe>')
+
+    $('#modelvideo').lightbox_me({
+        centered: true,
+        overlayCSS: { background: 'black', opacity: .8},
+        onLoad: function () {
+            $('#modelvideo').find('input:first').focus()
+        },
+        onClose: function () {
+
+            StopVideo();
+        }
+    });
+
+
+
+
+}
+
+function playEmbeddedVideo(videoSource) {
+
+    //Add the video to the container 
+    $('#modelvideo').html('<video id="vid1" autoplay="autoplay" height="512" width="910" poster="images/bg/video_welcome.jpg" controls><source src="' + videoSource + '.mp4" type="video/mp4" /><source src="' + videoSource + '.webm" type="video/webm" /><source src="' + videoSource + '.ogv" type="video/ogg" /></video>')
+    $('#modelvideo').lightbox_me({
+        centered: true,
+        overlayCSS: { background: 'black', opacity: .8 },
+        onLoad: function () {
+            $('#modelvideo').find('input:first').focus()
+        },
+        onClose: function () {
+
+            StopVideo();
+        }
+    });
+
+    var video = document.getElementById('vid1');
+    video.load();
+    video.play();
+
+}
+
+function StopVideo() {
+    $('#modelvideo').html('');
+}
